@@ -1,5 +1,7 @@
 import bot.helpers.logger as logger
-from bot.models.classes import AddressBook, Record
+import bot.helpers.storage as storage
+from bot.models.AddressBook import AddressBook
+from bot.models.Record import Record
 
 @logger.input_error
 def parse_input(user_input):
@@ -99,7 +101,7 @@ def birthdays(book: AddressBook):
     return "\n".join(f"{item['name']}: {item['congratulation_date']}" for item in upcoming)
 
 def main():
-    contacts = AddressBook()
+    contacts = storage.load_data()
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
@@ -107,6 +109,7 @@ def main():
 
         if command in ["close", "exit"]:
             print("Good bye!")
+            storage.save_data(contacts)
             break
         elif command == "hello":
             print("How can I help you?")
