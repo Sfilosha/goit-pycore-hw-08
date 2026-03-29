@@ -1,5 +1,5 @@
-import logger
-from classes import AddressBook, Record
+import bot.helpers.logger as logger
+from bot.models.classes import AddressBook, Record
 
 @logger.input_error
 def parse_input(user_input):
