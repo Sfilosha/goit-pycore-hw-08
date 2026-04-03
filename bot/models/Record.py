@@ -1,10 +1,12 @@
-from .Fields import Phone, Name, Birthday
+from .Fields import Phone, Name, Birthday, Id
+from nanoid import generate as generateId
 
 class Record:
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.id = Id(generateId('1234567890abcdef', size=4))
 
     def add_phone(self, number: str):
         self.phones.append(Phone(number))
@@ -33,4 +35,4 @@ class Record:
         self.birthday = Birthday(date)
 
     def __str__(self):
-        return f"{self.name} | phones: {'; '.join(p.value for p in self.phones)} | birthday: {self.birthday}"
+        return f"{self.id} | {self.name} | phones: {'; '.join(p.value for p in self.phones)} | birthday: {self.birthday}"
