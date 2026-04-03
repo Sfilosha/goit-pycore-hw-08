@@ -6,12 +6,12 @@ class AddressBook(UserDict):
 
     def add_record(self, contact: Record):
         self.data[contact.name.value] = contact
-
+        
     def find(self, name: str) -> Record:
         return self.data.get(name)
 
     def delete(self, name: str):
-        if name in self.data:
+         if name in self.data:
             del self.data[name]
 
     def get_upcoming_birthdays(self):

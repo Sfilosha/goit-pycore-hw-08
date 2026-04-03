@@ -1,8 +1,7 @@
 import bot.helpers.logger as logger
 import bot.helpers.storage as storage
-from bot.models.AddressBook import AddressBook
-from bot.models.Record import Record
-import bot.contactCommands as contact
+import bot.cli.contactCommands as contact
+import bot.helpers.parse_input as parse
 # import questionary
 
 # answer = questionary.select(
@@ -13,13 +12,6 @@ import bot.contactCommands as contact
 # if answer == "Додати запис":
 #     add_record_function()
 
-@logger.input_error
-def parse_input(user_input):
-    if not user_input.strip():
-        raise ValueError
-    cmd, *args = user_input.split()
-    cmd = cmd.strip().lower()
-    return cmd, *args
 
 def show_commands():
     text = {
@@ -27,6 +19,7 @@ def show_commands():
         'Change user phone': "change <username> <new phone>",
         'Check user phone': "phone <username>",
         "See all contacts": "all",
+        "Add Email": "add-email <username> <email@email.com>",
         "Add Birthday": "add-birthday <username> <DD.MM.YYYY>",
         "Check User's Birthday": "show-birthday <username>",
         "Upcoming birthdays (next 7 days)": "birthdays",
@@ -42,7 +35,7 @@ def main():
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
-        command, *args = parse_input(user_input)
+        command, *args = parse.parse_input(user_input)
 
         if command in ["close", "exit"]:
             print("Good bye!")
@@ -52,20 +45,34 @@ def main():
             print("How can I help you?")
         elif command == "add":
             print(contact.add_contact(args, contacts))
+        elif command == "remove":
+            print(contact.remove_contact(args, contacts))
         elif command == "change":
             print(contact.change_contact(args, contacts))
+        elif command == "remove-phone":
+            print(contact.remove_phone(args, contacts))
         elif command == "phone":
             print(contact.show_phone(args, contacts))
         elif command == "all":
             print(contact.show_all(contacts))
         elif command == "add-birthday":
             print(contact.add_birthday(args, contacts))
+        elif command == "add-email":
+            print(contact.add_email(args, contacts))
+        elif command == "remove-email":
+            print(contact.remove_email(args, contacts))
+        elif command == "change-email":
+            print(contact.edit_email(args, contacts))
+        elif command == "add-address":
+            print(contact.add_address(args, contacts))
+        elif command == "remove-address":
+            print(contact.remove_address(args, contacts))
+        elif command == "change-address":
+            print(contact.change_address(args, contacts))
         elif command == "show-birthday":
             print(contact.show_birthday(args, contacts))
         elif command == "birthdays":
             print(contact.birthdays(contacts))
-        elif command == "remove-phone":
-            print(contact.remove_phone(args, contacts))
         elif command == "help":
             show_commands()
         else:

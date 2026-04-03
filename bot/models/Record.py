@@ -1,12 +1,14 @@
-from .Fields import Phone, Name, Birthday, Id
+from .Fields import Phone, Name, Birthday, Id, Email, Address
 from nanoid import generate as generateId
 
 class Record:
     def __init__(self, name):
+        self.id = Id(generateId('1234567890abcdef', size=4))
         self.name = Name(name)
         self.phones = []
         self.birthday = None
-        self.id = Id(generateId('1234567890abcdef', size=4))
+        self.address = None
+        self.email = None
 
     def add_phone(self, number: str):
         self.phones.append(Phone(number))
@@ -30,9 +32,34 @@ class Record:
             if phone.value == number:
                 return phone
         return None
+    
 
     def add_birthday(self, date: str):
         self.birthday = Birthday(date)
 
+    def add_email(self, email: str):
+        self.email = Email(email)
+    
+    def remove_email(self):
+        if not self.email:
+            return None
+        self.email.value = None
+        
+    def change_email(self, address: str):
+        self.email.value = address
+
+    
+    def add_address(self, address: str):
+        self.address = Address(address)
+    
+    def remove_address(self):
+        if not self.address:
+            return None
+        self.address.value = None
+
+    def change_address(self, address: str):
+        self.address.value = address
+    
+
     def __str__(self):
-        return f"{self.id} | {self.name} | phones: {'; '.join(p.value for p in self.phones)} | birthday: {self.birthday}"
+        return f"{self.id} | {self.name} | phones: {'; '.join(p.value for p in self.phones)} | birthday: {self.birthday} | email: {self.email} | address: {self.address}"

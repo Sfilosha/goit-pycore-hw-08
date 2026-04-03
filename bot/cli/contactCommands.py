@@ -18,6 +18,15 @@ def add_contact(args, book: AddressBook):
     return message
 
 @logger.input_error
+def remove_contact(args, book: AddressBook):
+    name = args[0]
+    contact = book.find(name)
+    if contact:
+        book.delete(name)
+        return f"Contact '{name}' removed."
+    return f"Contact '{name}' not found."
+
+@logger.input_error
 def change_contact(args, book: AddressBook):
     name, old_number, new_number = args
     contact = book.find(name)
@@ -54,6 +63,7 @@ def show_all(book: AddressBook):
         result.append(f"{i} | {contact}")
     return "\n".join(result)
 
+# BIRTHDAY COMMANDS
 
 @logger.input_error
 def add_birthday(args, book: AddressBook):
@@ -78,3 +88,64 @@ def birthdays(book: AddressBook):
         return "No upcoming birthdays in the next week."
     print("Upcoming birthdays in next 7 days:")
     return "\n".join(f"{item['name']}: {item['congratulation_date']}" for item in upcoming)
+
+# EMAIL COMMANDS
+@logger.input_error
+def add_email(args, book: AddressBook):
+    name, email = args
+    contact = book.find(name)
+    if contact:
+        contact.add_email(email)
+        return "Email added."
+    return "Contact not found."
+
+@logger.input_error
+def remove_email(args, book: AddressBook):
+    name = args[0]
+    contact = book.find(name)
+    if contact:
+        contact.remove_email()
+        return f"Email of '{name}' removed."
+    else: 
+        return f"Email of '{name}' not found."
+
+@logger.input_error
+def change_email(args, book: AddressBook):
+    name, email = args
+    contact = book.find(name)
+    if contact:
+        contact.change_email(email)
+        return "New Email Set."
+    return "Contact not found."
+
+# ADDRESS COMMANDS
+@logger.input_error
+def add_address(args, book: AddressBook):
+    name = args[0]
+    address = " ".join(args[1:])
+    print(address)
+    contact = book.find(name)
+    if contact:
+        contact.add_address(address)
+        return "Address added."
+    return "Contact not found."
+
+@logger.input_error
+def remove_address(args, book: AddressBook):
+    name, * _ = args
+    contact = book.find(name)
+    if contact:
+        contact.remove_address()
+        return f"Address of '{name}' removed."
+    else: 
+        return f"Address of '{name}' not found."
+
+@logger.input_error
+def change_address(args, book: AddressBook):
+    name = args[0]
+    address = " ".join(args[1:])
+    contact = book.find(name)
+    if contact:
+        contact.change_address(address)
+        return "New address set."
+    return "Contact not found."
